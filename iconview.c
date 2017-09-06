@@ -233,8 +233,8 @@ static CTRLDATA CtrlBook[] =
 
 static DLGTEMPLATE DlgIcon =
 {
-    WS_BORDER | WS_CAPTION,
-    WS_EX_NONE,
+    WS_CAPTION | WS_DLGFRAME,
+    WS_EX_NOCLOSEBOX,
     0, 0,480,272,
     my_friends,
     0, 0,
