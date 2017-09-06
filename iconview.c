@@ -32,7 +32,7 @@
 #include "iconview_res_en.h"
 #endif
 
-#define IDC_ICONVIEW        100
+#define IDC_ICONVIEW                100
 #define IDC_BT                       200
 #define IDC_BT2                      300
 #define IDC_BT3                      400
@@ -43,6 +43,9 @@
 
 
 #define ICON_NUM    8
+
+#define BUTTON_WIDTH    60
+#define BUTTON_HEIGHT   60
 
 
 static HWND hIconView;
@@ -61,7 +64,7 @@ static const char* iconfiles[ICON_NUM] =
 		"./res/kpilot.png"
 };
 
-static const char *iconlabels[12] =
+static const char *iconlabels[ICON_NUM] =
 {
     "录像检索",
     "录像设置",
@@ -70,7 +73,7 @@ static const char *iconlabels[12] =
     "车辆管理",
     "显示设置",
     "密码管理",
-    "退        出"
+    "退   出"
 };
 
 #if 0
@@ -203,45 +206,98 @@ static int BookProc (HWND hDlg, int message, WPARAM wParam, LPARAM lParam)
     return DefaultDialogProc (hDlg, message, wParam, lParam);
 }
 
-static CTRLDATA CtrlBook[] =
+
+static CTRLDATA CtrlBook[] = //对话框中的组件数组
 {
 //   {
 //      CTRL_ICONVIEW,
-//      WS_BORDER | WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_HSCROLL,
+//      WS_BORDER | WS_CHILD | WS_VISIBLE,
 //         10, 10, 290, 300,
 //       IDC_ICONVIEW,
 //        "",
 //       0
 //    },
-//    {
-//        CTRL_BUTTON,
-//        WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON | WS_TABSTOP,
-//        60, 330, 50, 30,
-//        IDC_ADD,
-//        add,
-//        0
-//    },
-//    {
-//        CTRL_BUTTON,
-//         WS_CHILD | WS_VISIBLE | WS_TABSTOP | BS_PUSHBUTTON,
-//        170, 330, 50, 30,
-//        IDC_DELETE,
-//        delete_,
-//        0
-//    }
+    {
+        CTRL_BUTTON,
+        WS_CHILD | WS_VISIBLE | BS_ICON,
+        30, 30, BUTTON_WIDTH, BUTTON_HEIGHT,
+        IDC_ADD,
+        submenu1,
+        0
+    },
+    {
+        CTRL_BUTTON,
+        WS_CHILD | WS_VISIBLE,
+        140, 30, BUTTON_WIDTH, BUTTON_HEIGHT,
+        IDC_ADD,
+        submenu2,
+        0
+    },
+    {
+        CTRL_BUTTON,
+        WS_CHILD | WS_VISIBLE,
+        250, 30, BUTTON_WIDTH, BUTTON_HEIGHT,
+        IDC_ADD,
+        submenu3,
+        0
+    },
+    {
+        CTRL_BUTTON,
+        WS_CHILD | WS_VISIBLE,
+        360, 30, BUTTON_WIDTH, BUTTON_HEIGHT,
+        IDC_ADD,
+        submenu4,
+        0
+    },
+    {
+        CTRL_BUTTON,
+        WS_CHILD | WS_VISIBLE,
+        30, 140, BUTTON_WIDTH, BUTTON_HEIGHT,
+        IDC_ADD,
+        submenu5,
+        0
+    },
+    {
+        CTRL_BUTTON,
+        WS_CHILD | WS_VISIBLE,
+        140, 140, BUTTON_WIDTH, BUTTON_HEIGHT,
+        IDC_ADD,
+        submenu6,
+        0
+    },
+    {
+        CTRL_BUTTON,
+        WS_CHILD | WS_VISIBLE,
+        250, 140, BUTTON_WIDTH, BUTTON_HEIGHT,
+        IDC_ADD,
+        submenu7,
+        0
+    },
+    {
+        CTRL_BUTTON,
+        WS_CHILD | WS_VISIBLE,
+        360, 140, BUTTON_WIDTH, BUTTON_HEIGHT,
+        IDC_ADD,
+        submenu8,
+        0
+    },
 };
 
-static DLGTEMPLATE DlgIcon =
+static DLGTEMPLATE DlgIcon =//DLGTEMPLATE 对话框模板
 {
-    WS_CAPTION | WS_DLGFRAME,
-    WS_EX_NOCLOSEBOX,
-    0, 0,480,272,
-    my_friends,
-    0, 0,
-    TABLESIZE(CtrlBook), CtrlBook,
-    0
+    WS_CAPTION | WS_DLGFRAME,      //样式
+    WS_EX_NOCLOSEBOX,              //附加样式
+    0, 0,480,272,                  //位置及大小
+    capture,                       //标题
+    0, 0,                          //图标及菜单？
+    TABLESIZE(CtrlBook), CtrlBook,//控件的数量以及指针
+    0                             //这个默认为0
 };
 
+
+
+
+//函数入口
 int MiniGUIMain (int argc, const char* argv[])
 {
     int i;
@@ -251,11 +307,11 @@ int MiniGUIMain (int argc, const char* argv[])
 #endif
     
     for (i=0; i<TABLESIZE(myicons); i++) {
-        LoadBitmap (HDC_SCREEN, &myicons[i], iconfiles[i]);
+        LoadBitmap(HDC_SCREEN, &myicons[i], iconfiles[i]);
     }
 
-    DialogBoxIndirectParam (&DlgIcon, HWND_DESKTOP, BookProc, 0L);
-
+    DialogBoxIndirectParam (&DlgIcon, HWND_DESKTOP, BookProc, 0L);//创建窗口的函数
+    //描述对话窗口的结构体，主窗口的句柄，回调函数，第二信息参数
     return 0;
 }
 
