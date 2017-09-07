@@ -38,8 +38,14 @@
 #define IDC_BT3                      400
 #define IDC_BT4                      500
 
-#define IDC_ADD                     600
-#define IDC_DELETE                  601
+#define IDC_VIDEO_FIND                 600
+#define IDC_VIDEO_SET                   601
+#define IDC_FUNC_SET                     602
+#define IDC_SYS_INFO                      603
+#define IDC_VEC_INFO                     604
+#define IDC_DISPLAY_SET               605
+#define IDC_PASSWORD                  606
+#define IDC_QUIT                               607
 
 
 #define ICON_NUM    8
@@ -51,6 +57,10 @@
 static HWND hIconView;
 
 static BITMAP myicons [ICON_NUM];
+
+static BITMAP submenu3_icon;
+
+
 
 static const char* iconfiles[ICON_NUM] =
 {
@@ -105,6 +115,8 @@ static void myDrawItem (HWND hWnd, GHANDLE hsvi, HDC hdc, RECT *rcDraw)
 }
 #endif
 
+
+
 static int BookProc (HWND hDlg, int message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -145,7 +157,7 @@ static int BookProc (HWND hDlg, int message, WPARAM wParam, LPARAM lParam)
                 sel = SendMessage (hIconView, IVM_GETCURSEL, 0, 0);
             }
             break;
-        case IDC_ADD:
+        case IDC_VIDEO_FIND:
         {
             IVITEMINFO ivii;
             char buff [10];
@@ -164,7 +176,7 @@ static int BookProc (HWND hDlg, int message, WPARAM wParam, LPARAM lParam)
             break;
         }
 
-        case IDC_DELETE:
+        case IDC_VIDEO_SET:
         {
             int sel = SendMessage (hIconView, IVM_GETCURSEL, 0, 0);
             int count = SendMessage (hIconView, IVM_GETITEMCOUNT, 0, 0);
@@ -219,41 +231,42 @@ static CTRLDATA CtrlBook[] = //对话框中的组件数组
 //    },
     {
         CTRL_BUTTON,
-        WS_CHILD | WS_VISIBLE | BS_ICON,
+        WS_CHILD | WS_VISIBLE |  BS_NOBORDER,
         30, 30, BUTTON_WIDTH, BUTTON_HEIGHT,
-        IDC_ADD,
+	    IDC_VIDEO_FIND,
         submenu1,
         0
     },
     {
         CTRL_BUTTON,
-        WS_CHILD | WS_VISIBLE,
+        WS_CHILD | WS_VISIBLE |  BS_DEFPUSHBUTTON,
         140, 30, BUTTON_WIDTH, BUTTON_HEIGHT,
-        IDC_ADD,
+	    IDC_VIDEO_SET,
         submenu2,
         0
     },
     {
         CTRL_BUTTON,
-        WS_CHILD | WS_VISIBLE,
+        WS_CHILD | WS_VISIBLE |  BS_BITMAP   |  BS_DEFPUSHBUTTON | BS_NOBORDER,
         250, 30, BUTTON_WIDTH, BUTTON_HEIGHT,
-        IDC_ADD,
+	    IDC_FUNC_SET,
         submenu3,
-        0
+	    (DWORD)&submenu3_icon,
+	    WS_EX_TRANSPARENT,
     },
     {
         CTRL_BUTTON,
-        WS_CHILD | WS_VISIBLE,
+        WS_CHILD | WS_VISIBLE | WS_EX_TRANSPARENT ,
         360, 30, BUTTON_WIDTH, BUTTON_HEIGHT,
-        IDC_ADD,
+	    IDC_SYS_INFO,
         submenu4,
         0
     },
     {
         CTRL_BUTTON,
-        WS_CHILD | WS_VISIBLE,
+        WS_CHILD | WS_VISIBLE | BS_REALSIZEIMAGE,
         30, 140, BUTTON_WIDTH, BUTTON_HEIGHT,
-        IDC_ADD,
+	    IDC_VEC_INFO,
         submenu5,
         0
     },
@@ -261,7 +274,7 @@ static CTRLDATA CtrlBook[] = //对话框中的组件数组
         CTRL_BUTTON,
         WS_CHILD | WS_VISIBLE,
         140, 140, BUTTON_WIDTH, BUTTON_HEIGHT,
-        IDC_ADD,
+	    IDC_DISPLAY_SET,
         submenu6,
         0
     },
@@ -269,7 +282,7 @@ static CTRLDATA CtrlBook[] = //对话框中的组件数组
         CTRL_BUTTON,
         WS_CHILD | WS_VISIBLE,
         250, 140, BUTTON_WIDTH, BUTTON_HEIGHT,
-        IDC_ADD,
+	    IDC_PASSWORD,
         submenu7,
         0
     },
@@ -277,7 +290,7 @@ static CTRLDATA CtrlBook[] = //对话框中的组件数组
         CTRL_BUTTON,
         WS_CHILD | WS_VISIBLE,
         360, 140, BUTTON_WIDTH, BUTTON_HEIGHT,
-        IDC_ADD,
+	    IDC_QUIT,
         submenu8,
         0
     },
@@ -285,13 +298,13 @@ static CTRLDATA CtrlBook[] = //对话框中的组件数组
 
 static DLGTEMPLATE DlgIcon =//DLGTEMPLATE 对话框模板
 {
-    WS_CAPTION | WS_DLGFRAME,      //样式
-    WS_EX_NOCLOSEBOX,              //附加样式
-    0, 0,480,272,                  //位置及大小
-    capture,                       //标题
-    0, 0,                          //图标及菜单？
-    TABLESIZE(CtrlBook), CtrlBook,//控件的数量以及指针
-    0                             //这个默认为0
+    WS_CAPTION | WS_DLGFRAME,               //样式
+    WS_EX_NOCLOSEBOX,                               //附加样式
+    0, 0,480,272,                                                   //位置及大小
+    capture,                                                          //标题
+    0, 0,                                                                  //图标及菜单？
+    TABLESIZE(CtrlBook), CtrlBook,              //控件的数量以及指针
+    0                                                                       //这个默认为0
 };
 
 
@@ -306,9 +319,11 @@ int MiniGUIMain (int argc, const char* argv[])
     JoinLayer(NAME_DEF_LAYER , "iconview" , 0 , 0);
 #endif
     
-    for (i=0; i<TABLESIZE(myicons); i++) {
-        LoadBitmap(HDC_SCREEN, &myicons[i], iconfiles[i]);
-    }
+//    for (i=0; i<TABLESIZE(myicons); i++) {
+//        LoadBitmap(HDC_SCREEN, &myicons[i], iconfiles[i]);
+//    }
+
+	LoadBitmap(HDC_SCREEN,&submenu3_icon, iconfiles[3]);
 
     DialogBoxIndirectParam (&DlgIcon, HWND_DESKTOP, BookProc, 0L);//创建窗口的函数
     //描述对话窗口的结构体，主窗口的句柄，回调函数，第二信息参数
