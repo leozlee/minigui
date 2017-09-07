@@ -18,3 +18,8 @@ target_link_libraries(input -lminigui_ths -lpng -ljpeg -lpthread -lmgncs -lmgplu
 set(MAIN_WINDOW_SOURCE_FILES iconview.c)
 add_executable(main_window ${MAIN_WINDOW_SOURCE_FILES})
 target_link_libraries(main_window -lminigui_ths -lpng -ljpeg -lpthread -lmgncs -lmgplus -lmgutils -ldl -lmgi -lfreetype)
+
+set(MULTI_WINDOW_SOURCE_FILES mutil_window.c)
+add_executable(multi_main_window ${MULTI_WINDOW_SOURCE_FILES})
+target_link_libraries(multi_main_window -lminigui_ths -lpng -ljpeg -lpthread -lmgncs -lmgplus -lmgutils -ldl -lmgi -lfreetype)
+

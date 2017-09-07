@@ -247,7 +247,7 @@ static CTRLDATA CtrlBook[] = //对话框中的组件数组
     },
     {
         CTRL_BUTTON,
-        WS_CHILD | WS_VISIBLE |  BS_BITMAP   |  BS_DEFPUSHBUTTON | BS_NOBORDER,
+            WS_CHILD | WS_VISIBLE |  BS_BITMAP   |  BS_DEFPUSHBUTTON | WS_EX_TRANSPARENT ,
         250, 30, BUTTON_WIDTH, BUTTON_HEIGHT,
 	    IDC_FUNC_SET,
         submenu3,
